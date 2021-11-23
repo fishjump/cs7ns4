@@ -44,6 +44,7 @@ func handleUserPost(w http.ResponseWriter, req *http.Request) {
 }
 
 func UserHandler(w http.ResponseWriter, req *http.Request) {
+	defer req.Body.Close()
 	logger.Infof("Method: %s, Path: %s", req.Method, req.RequestURI)
 
 	switch req.Method {

@@ -111,5 +111,10 @@ func Put(data *entities.AirQuality) error {
 	}
 
 	_, err = file.WriteString(entities.ToJson(*data))
-	return err
+	if err != nil {
+		return err
+	}
+
+	logger.Infof("Save new air quality data: %s", filename)
+	return nil
 }

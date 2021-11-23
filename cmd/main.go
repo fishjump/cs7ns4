@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"sync"
 
+	airqualitycollector "github.com/fishjump/cs7ns4/modules/air-quality-collector"
 	"github.com/fishjump/cs7ns4/modules/server"
 )
 
@@ -57,7 +58,7 @@ func init() {
 	conf.launchList = make(map[string]fn)
 
 	conf.launchList["server"] = launchWrapper(func() { server.Run(conf.ip, conf.port) })
-	// launchList["collector"] = func() { defer wg.Done(); }
+	conf.launchList["collector"] = launchWrapper(func() { airqualitycollector.Run() })
 }
 
 func main() {

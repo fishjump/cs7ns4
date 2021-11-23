@@ -4,7 +4,7 @@ import (
 	"io"
 	"net/http"
 
-	airquality "github.com/fishjump/cs7ns4/modules/db/air_quality"
+	airquality "github.com/fishjump/cs7ns4/modules/db/air-quality"
 	"github.com/fishjump/cs7ns4/modules/entities"
 )
 
@@ -45,6 +45,7 @@ func handleAirQualityPost(w http.ResponseWriter, req *http.Request) {
 }
 
 func AirQualityHandler(w http.ResponseWriter, req *http.Request) {
+	defer req.Body.Close()
 	logger.Infof("Method: %s, Path: %s", req.Method, req.RequestURI)
 
 	switch req.Method {

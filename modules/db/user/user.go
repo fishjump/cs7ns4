@@ -79,5 +79,10 @@ func Put(data *entities.User) error {
 	}
 
 	_, err = file.WriteString(entities.ToJson(*data))
-	return err
+	if err != nil {
+		return err
+	}
+
+	logger.Infof("Save new user data: %s", filename)
+	return nil
 }

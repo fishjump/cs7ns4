@@ -1,3 +1,5 @@
+github.com/robfig/cron/v3 v3.0.0 h1:kQ6Cb7aHOHTSzNVNEhmp8EcWKLb4CbiMW9h9VyIhO4E=
+github.com/robfig/cron/v3 v3.0.0/go.mod h1:eQICP3HwyT7UooqI/z+Ov+PtYAWygg1TEWWzGIFLtro=
 github.com/withmandala/go-log v0.1.0 h1:wINmTEe7BQ6zEA8sE7lSsYeaxCLluK6RFjF/IB5tzkA=
 github.com/withmandala/go-log v0.1.0/go.mod h1:/V9xQUTW74VjYm3u2Liv/bIUGLWoL9z2GlHwtscp4vg=
 golang.org/x/crypto v0.0.0-20211117183948-ae814b36b871 h1:/pEO3GD/ABYAjuakUS6xSEmmlyVS4kxBNkeA9tLJiTI=
