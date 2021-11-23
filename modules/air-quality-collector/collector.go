@@ -15,7 +15,7 @@ var (
 func init() {
 	logger = log.New(os.Stderr)
 	c = cron.New()
-	c.AddFunc("@every 1m", doAirQualityUpdateRequest)
+	c.AddFunc("@every 5m", doAirQualityUpdateRequest)
 }
 
 func Run() {
