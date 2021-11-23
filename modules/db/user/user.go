@@ -65,6 +65,49 @@ func Get() (string, error) {
 	return string(data), nil
 }
 
+func GetLatest(n int) (string, error) {
+	files, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return "", err
+	}
+
+	l := len(files)
+	if l == 0 {
+		return "", errors.New("empty data")
+	}
+	if n > l {
+		n = l
+	}
+
+	sort.Slice(files, func(i, j int) bool {
+		if files[i].IsDir() {
+			return true
+		}
+
+		if files[j].IsDir() {
+			return false
+		}
+
+		return files[i].Name() > files[j].Name()
+	})
+
+	data := "["
+	for i := 0; i < n; i++ {
+		tmp, err := ioutil.ReadFile(dir + files[i].Name())
+		if err != nil {
+			return "", err
+		}
+		data += string(tmp)
+
+		if i != n-1 {
+			data += ","
+		}
+	}
+	data += "]"
+
+	return data, nil
+}
+
 func Put(data *entities.User) error {
 	filename := fmt.Sprintf(storage, data.Timestamp)
 

@@ -41,11 +41,24 @@ type (
 		Timestamp       int     `json:"timestamp"`
 	}
 
+	AirQualityList []AirQuality
+
 	User struct {
 		Latitude  float64 `json:"latitude"`
 		Longitude float64 `json:"longitude"`
 		Timestamp int     `json:"timestamp"`
 	}
+
+	UserList []User
+
+	QueryReponse struct {
+		AirQualityIndex int     `json:"air-quality-index"`
+		Latitude        float64 `json:"latitude"`
+		Longitude       float64 `json:"longitude"`
+		Timestamp       int     `json:"timestamp"`
+	}
+
+	QueryReponseList []QueryReponse
 )
 
 var (
