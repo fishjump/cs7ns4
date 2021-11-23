@@ -4,4 +4,4 @@
   - [x] db r/w
   - [x] converter
   - [ ] www front end
-  - [ ] aqi data collector(http client)
+  - [x] aqi data collector(http client)
