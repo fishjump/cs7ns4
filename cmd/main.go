@@ -39,6 +39,16 @@ func parseParams() {
 	flag.IntVar(&conf.port, "port", 8888, "server port")
 }
 
+func launchWrapper(f fn) fn {
+	return func() {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			f()
+		}()
+	}
+}
+
 func init() {
 	showBanner()
 
@@ -46,14 +56,13 @@ func init() {
 
 	conf.launchList = make(map[string]fn)
 
-	conf.launchList["server"] = func() { defer wg.Done(); server.Run(conf.ip, conf.port) }
+	conf.launchList["server"] = launchWrapper(func() { server.Run(conf.ip, conf.port) })
 	// launchList["collector"] = func() { defer wg.Done(); }
 }
 
 func main() {
-	for _, fn := range conf.launchList {
-		wg.Add(1)
-		go fn()
+	for _, f := range conf.launchList {
+		f()
 	}
 
 	wg.Wait()

@@ -9,22 +9,17 @@ import (
 )
 
 func handleUserGet(w http.ResponseWriter, req *http.Request) {
-	if !req.URL.Query().Has("key") {
-		makeError(
-			&w, http.StatusBadRequest,
-			"GET parameter \"key\" is required",
-		)
-		return
-	}
-
-	resp, err := user.Get(req.URL.Query().Get("key"))
+	json, err := user.Get()
 	if err != nil {
 		makeError(&w, http.StatusBadRequest, err.Error())
 		return
 	}
 
+	var data interface{}
+	entities.FromJson(json, &data)
+
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(resp))
+	w.Write([]byte(entities.SuccessedResponseBody(data)))
 }
 
 func handleUserPost(w http.ResponseWriter, req *http.Request) {
@@ -36,11 +31,7 @@ func handleUserPost(w http.ResponseWriter, req *http.Request) {
 
 	body := &entities.UserRequestBody{}
 	entities.FromJson(string(jsonStr), body)
-	data, err := entities.UserRequestBodyToUser(body)
-	if err != nil {
-		makeError(&w, http.StatusBadRequest, err.Error())
-		return
-	}
+	data := entities.UserRequestBodyToUser(body)
 
 	err = user.Put(&data)
 	if err != nil {

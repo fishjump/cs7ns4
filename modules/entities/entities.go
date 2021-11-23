@@ -34,15 +34,17 @@ type (
 	}
 
 	AirQuality struct {
-		AirQualityIndex int `json:"air-quality-index"`
-		Station         int `json:"station"`
-		Timestamp       int `json:"timestamp"`
+		AirQualityIndex int     `json:"air-quality-index"`
+		Station         int     `json:"station"`
+		Latitude        float64 `json:"latitude"`
+		Longitude       float64 `json:"longitude"`
+		Timestamp       int     `json:"timestamp"`
 	}
 
 	User struct {
 		Latitude  float64 `json:"latitude"`
 		Longitude float64 `json:"longitude"`
-		Timestamp float64 `json:"timestamp"`
+		Timestamp int     `json:"timestamp"`
 	}
 )
 

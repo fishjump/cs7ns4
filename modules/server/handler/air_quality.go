@@ -9,20 +9,14 @@ import (
 )
 
 func handleAirQualityGet(w http.ResponseWriter, req *http.Request) {
-	if !req.URL.Query().Has("key") {
-		makeError(
-			&w, http.StatusBadRequest,
-			"GET parameter \"key\" is required",
-		)
-		return
-	}
-
-	data := &entities.AirQuality{}
-	err := airquality.Get(req.URL.Query().Get("key"), data)
+	json, err := airquality.Get()
 	if err != nil {
 		makeError(&w, http.StatusBadRequest, err.Error())
 		return
 	}
+
+	var data interface{}
+	entities.FromJson(json, &data)
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(entities.SuccessedResponseBody(data)))
@@ -38,11 +32,7 @@ func handleAirQualityPost(w http.ResponseWriter, req *http.Request) {
 
 	body := &entities.AirQualityRequestBody{}
 	entities.FromJson(string(jsonStr), body)
-	data, err := entities.AirQualityRequestBodyToAirQuality(body)
-	if err != nil {
-		makeError(&w, http.StatusBadRequest, err.Error())
-		return
-	}
+	data := entities.AirQualityRequestBodyToAirQuality(body)
 
 	err = airquality.Put(&data)
 	if err != nil {
