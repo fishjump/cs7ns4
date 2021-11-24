@@ -24,8 +24,8 @@ func AirQualityRequestBodyToAirQuality(src *AirQualityRequestBody) AirQuality {
 	data := AirQuality{
 		AirQualityIndex: src.Data.AirQualityIndex,
 		Station:         src.Data.Station,
-		Longitude:       src.Data.City.Geo[0],
-		Latitude:        src.Data.City.Geo[1],
+		Latitude:        src.Data.City.Geo[0],
+		Longitude:       src.Data.City.Geo[1],
 		Timestamp:       src.Data.Time.Timestamp,
 	}
 
