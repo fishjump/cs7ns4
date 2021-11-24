@@ -28,6 +28,7 @@ func init() {
 	handlers["/"] = handler.WwwHandler
 	handlers["/db/air-quality"] = handler.AirQualityHandler
 	handlers["/db/user"] = handler.UserHandler
+	handlers["/db/query"] = handler.DbQueryHandler
 }
 
 func listenAndServe(ip string, port int) {

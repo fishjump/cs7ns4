@@ -2,17 +2,24 @@ package handler
 
 import (
 	"net/http"
-
-	"github.com/fishjump/cs7ns4/modules/www"
+	"os"
+	"path/filepath"
 )
 
-func WwwHandler(w http.ResponseWriter, req *http.Request) {
-	resp, err := www.Serve()
+var (
+	file string
+)
+
+func init() {
+	exe, err := os.Executable()
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(err.Error()))
+		logger.Error(err)
+		return
 	}
 
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(resp))
+	file = filepath.Dir(exe) + "/resource/index.html"
+}
+
+func WwwHandler(w http.ResponseWriter, req *http.Request) {
+	http.ServeFile(w, req, file)
 }

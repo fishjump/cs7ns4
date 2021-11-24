@@ -3,7 +3,8 @@
 ## TODO
   - [x] db r/w
   - [x] converter
-  - [ ] www frontend
+  - [x] www frontend
     - [x] frontend metadata get
-    - [ ] webpage
+    - [x] webpage
   - [x] aqi data collector(http client)
+  - [ ] write report
