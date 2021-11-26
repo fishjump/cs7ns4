@@ -1,9 +1,179 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Urban Computing assignment 4</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
-  </head>
- <body> <div id="main" style="margin: 8px; min-height: 500px;"></div> <script type="text/javascript"> const urlSearchParams = new URLSearchParams(window.location.search); const params = Object.fromEntries(urlSearchParams.entries());var myChart = echarts.init(document.getElementById("main")); var option;$.getJSON("https://uc.superfish.me/db/query?username="+params.username, function (data) { myChart.setOption( (option = { title: { text: "Air quality index around the user", left: "1%" }, tooltip: { trigger: "axis" }, grid: { left: "5%", right: "15%", bottom: "10%" }, xAxis: { data: data.data.map(function (item) { var date = new Date(item.timestamp * 1000); return date.toUTCString(); }) }, yAxis: {}, toolbox: { right: 10, feature: { dataZoom: { yAxisIndex: "none" }, restore: {}, saveAsImage: {} } }, dataZoom: [ { startValue: "" }, { type: "inside" } ], visualMap: { top: 50, right: 10, pieces: [ { gt: 0, lte: 20, color: "#93CE07" }, { gt: 20, lte: 40, color: "#FBDB0F" }, { gt: 40, lte: 60, color: "#FC7D02" }, { gt: 60, lte: 80, color: "#FD0100" }, { gt: 80, lte: 100, color: "#AA069F" }, { gt: 100, color: "#AC3B2A" } ], outOfRange: { color: "#999" } }, series: { name: "Air quality index around the user", type: "line", data: data.data.map(function (item) { return item["air-quality-index"]; }), markLine: { silent: true, lineStyle: { color: "#333" }, data: [ { yAxis: 20 }, { yAxis: 40 }, { yAxis: 60 }, { yAxis: 80 }, { yAxis: 100 } ] } } }) );});option && myChart.setOption(option); </script> </body></html>
+<head>
+  <meta charset="utf-8">
+  <title>Urban Computing Data Display</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/layui/2.6.8/css/layui.css"  media="all">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
+</head>
+<body>
+              
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+  <legend>Urban Computing Data Display</legend>
+</fieldset>
+ 
+<div class="layui-tab layui-tab-brief" style="margin: 1%;">
+  <ul class="layui-tab-title" id="tabs">
+    <li class="layui-this user-tab" div->User's Breath Quality</li>
+    <li id="13377" class="station-tab">Davitt Road, Inchicore, Dublin 12, Ireland</li>
+    <li id="13390" class="station-tab">Marino, Dublin 3, Ireland</li>
+    <li id="13405" class="station-tab">St. John’s Road, Kilmainham, Dublin 8, Ireland</li>
+    <li id="13379" class="station-tab">Dublin Port, Dublin 1, Ireland</li>
+    <li id="5112" class="station-tab">Rathmines, Ireland</li>
+    <li id="13400" class="station-tab">Ringsend, Dublin 4, Ireland</li>
+    <li id="13404" class="station-tab">St. Anne's Park, Dublin 5, Ireland</li>    
+    <li id="13372" class="station-tab">Clonskeagh, Ireland</li>
+    <li id="13384" class="station-tab">Finglas, Dublin 11, Ireland</li>
+    <li id="13402" class="station-tab">Sandymount Green, Dublin 4, Ireland</li>
+    <li id="13412" class="station-tab">Weaver Park, Dublin 8, Ireland</li>
+    <li id="13378" class="station-tab">Drumcondra Library, Dublin 9, Ireland</li>
+    <li id="13358" class="station-tab">Amiens Street, Dublin 1, Ireland</li>
+    <li id="13374" class="station-tab">Coolock, Dublin 5, Ireland</li>    
+    <li id="13363" class="station-tab">Ballymun Library, Dublin 9, Ireland</li>
+    <li id="13411" class="station-tab">Walkinstown Library, Dublin 12, Ireland</li>
+    <li id="13387" class="station-tab">Lord Edward Street, Dublin 2, Ireland</li>
+    <li id="13376" class="station-tab">Custom House Quay, Dublin 1, Ireland</li>
+  </ul>
+  <div class="layui-tab-content" style="height: auto; margin: 1%;">
+    <div class="layui-tab-item layui-show" id="user" style="height: 600px"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/layui/2.6.8/layui.js" charset="utf-8"></script>
+
+<script>
+function optGen(data, title) {
+    return {
+        title: {
+            text: title,
+            left: "1%"
+        },
+        tooltip: {
+            trigger: "axis"
+        },
+        grid: {
+            left: "5%",
+            right: "15%",
+            bottom: "10%"
+        },
+        xAxis: {
+            data: data.data.map(function(item) {
+                var date = new Date(item.timestamp * 1000);
+                return date.toUTCString();
+            })
+        },
+        yAxis: {},
+        toolbox: {
+            right: 10,
+            feature: {
+                dataZoom: {
+                    yAxisIndex: "none"
+                },
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        dataZoom: [{
+            startValue: ""
+        }, {
+            type: "inside"
+        }],
+        visualMap: {
+            top: 50,
+            right: 10,
+            pieces: [{
+                gt: 0,
+                lte: 20,
+                color: "#93CE07"
+            }, {
+                gt: 20,
+                lte: 40,
+                color: "#FBDB0F"
+            }, {
+                gt: 40,
+                lte: 60,
+                color: "#FC7D02"
+            }, {
+                gt: 60,
+                lte: 80,
+                color: "#FD0100"
+            }, {
+                gt: 80,
+                lte: 100,
+                color: "#AA069F"
+            }, {
+                gt: 100,
+                color: "#AC3B2A"
+            }],
+            outOfRange: {
+                color: "#999"
+            }
+        },
+        series: {
+            name: title,
+            type: "line",
+            data: data.data.map(function(item) {
+                return item["air-quality-index"];
+            }),
+            markLine: {
+                silent: true,
+                lineStyle: {
+                    color: "#333"
+                },
+                data: [{
+                    yAxis: 20
+                }, {
+                    yAxis: 40
+                }, {
+                    yAxis: 60
+                }, {
+                    yAxis: 80
+                }, {
+                    yAxis: 100
+                }]
+            }
+        }
+    }
+}
+
+const urlSearchParams = new URLSearchParams(window.location.search);
+const params = Object.fromEntries(urlSearchParams.entries());
+
+$('.station-tab').on('click', function() {
+    var myChart = echarts.init(document.getElementById("user"));
+    var option;
+    $.getJSON("https://uc.superfish.me/db/query?station=" + this.attributes["id"].value, function(data) {
+        option = optGen(data, "Air Quality Index");
+        myChart.setOption((option))
+    });
+});
+
+$('.user-tab').on('click', function() {
+    var myChart = echarts.init(document.getElementById("user"));
+    var option;
+    $.getJSON("https://uc.superfish.me/db/query?username=" + params.username, function(data) {
+        option = optGen(data, "Air Quality Index");
+        myChart.setOption((option))
+    });
+});
+
+var myChart = echarts.init(document.getElementById("user"));
+var option;
+$.getJSON("https://uc.superfish.me/db/query?username=" + params.username, function(data) {
+    option = optGen(data, "Air Quality Index");
+    myChart.setOption((option))
+});
+
+var clicks = $._data(document, "events").click
+for (i in clicks) {
+    if (clicks[i].handler && clicks[i].handler.name == "hideTabMore") {
+        clicks[i].handler = function() {};
+        break;
+    }
+}
+</script>
+
+</body>
+</html>

@@ -64,6 +64,73 @@ func getLatestData(path string) (string, error) {
 	return string(data), nil
 }
 
+func getAllData(path string) (string, error) {
+	files, err := ioutil.ReadDir(path)
+	if err != nil {
+		return "", err
+	}
+
+	if len(files) == 0 {
+		return "", errors.New("empty data")
+	}
+
+	data := "["
+	for idx, file := range files {
+		if file.IsDir() {
+			continue
+		}
+
+		tmp, err := ioutil.ReadFile(path + "/" + file.Name())
+		if err != nil {
+			return "", err
+		}
+
+		data += string(tmp)
+		if idx != len(files)-1 {
+			data += ","
+		}
+	}
+	data += "]"
+
+	return data, nil
+}
+
+func GetStation(name string) (string, error) {
+	files, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return "", err
+	}
+
+	if len(files) == 0 {
+		return "", errors.New("empty data")
+	}
+
+	// iterate station directories
+	var data string
+	for _, file := range files {
+		if !file.IsDir() {
+			continue
+		}
+
+		if file.Name() != name {
+			continue
+		}
+
+		data, err = getAllData(dir + file.Name())
+		if err != nil {
+			return "", err
+		}
+
+		break
+	}
+
+	if data == "" {
+		return "", errors.New("empty data")
+	}
+
+	return data, nil
+}
+
 // Get latest air quality data from each station
 func Get() (string, error) {
 	files, err := ioutil.ReadDir(dir)
