@@ -30,13 +30,13 @@ func init() {
 	}
 
 	dir = filepath.Dir(exe) + "/db/user/"
-	storage = dir + "%d.json"
+	storage = dir + "%s/%d.json"
 
 }
 
 // Get latest user upload
-func Get() (string, error) {
-	files, err := ioutil.ReadDir(dir)
+func Get(name string) (string, error) {
+	files, err := ioutil.ReadDir(dir + name)
 	if err != nil {
 		return "", err
 	}
@@ -65,8 +65,8 @@ func Get() (string, error) {
 	return string(data), nil
 }
 
-func GetLatest(n int) (string, error) {
-	files, err := ioutil.ReadDir(dir)
+func GetLatest(name string, n int) (string, error) {
+	files, err := ioutil.ReadDir(dir + name)
 	if err != nil {
 		return "", err
 	}
@@ -93,7 +93,7 @@ func GetLatest(n int) (string, error) {
 
 	data := "["
 	for i := 0; i < n; i++ {
-		tmp, err := ioutil.ReadFile(dir + files[i].Name())
+		tmp, err := ioutil.ReadFile(dir + name + "/" + files[i].Name())
 		if err != nil {
 			return "", err
 		}
@@ -108,8 +108,8 @@ func GetLatest(n int) (string, error) {
 	return data, nil
 }
 
-func Put(data *entities.User) error {
-	filename := fmt.Sprintf(storage, data.Timestamp)
+func Put(name string, data *entities.User) error {
+	filename := fmt.Sprintf(storage, name, data.Timestamp)
 
 	if err := os.MkdirAll(filepath.Dir(filename), 0755); err != nil {
 		return err

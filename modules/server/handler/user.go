@@ -9,7 +9,12 @@ import (
 )
 
 func handleUserGet(w http.ResponseWriter, req *http.Request) {
-	json, err := user.Get()
+	if !req.URL.Query().Has("username") {
+		makeError(&w, http.StatusBadRequest, "expect query parameter: username")
+		return
+	}
+
+	json, err := user.Get(req.URL.Query().Get("username"))
 	if err != nil {
 		makeError(&w, http.StatusBadRequest, err.Error())
 		return
@@ -23,6 +28,11 @@ func handleUserGet(w http.ResponseWriter, req *http.Request) {
 }
 
 func handleUserPost(w http.ResponseWriter, req *http.Request) {
+	if !req.URL.Query().Has("username") {
+		makeError(&w, http.StatusBadRequest, "expect query parameter: username")
+		return
+	}
+
 	jsonStr, err := io.ReadAll(req.Body)
 	if err != nil {
 		makeError(&w, http.StatusBadRequest, err.Error())
@@ -33,7 +43,7 @@ func handleUserPost(w http.ResponseWriter, req *http.Request) {
 	entities.FromJson(string(jsonStr), body)
 	data := entities.UserRequestBodyToUser(body)
 
-	err = user.Put(&data)
+	err = user.Put(req.URL.Query().Get("username"), &data)
 	if err != nil {
 		makeError(&w, http.StatusBadRequest, err.Error())
 		return

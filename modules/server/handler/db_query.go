@@ -8,7 +8,12 @@ import (
 )
 
 func handleDbQueryGet(w http.ResponseWriter, req *http.Request) {
-	json, err := db.Query()
+	if !req.URL.Query().Has("username") {
+		makeError(&w, http.StatusBadRequest, "expect query parameter: username")
+		return
+	}
+
+	json, err := db.Query(req.URL.Query().Get("username"))
 	if err != nil {
 		makeError(&w, http.StatusBadRequest, err.Error())
 		return

@@ -53,9 +53,9 @@ func getQueryReponse(u entities.User, al entities.AirQualityList) entities.Query
 }
 
 // Find the 3 nearest stations and get the average AQI
-func Query() (string, error) {
+func Query(name string) (string, error) {
 	var uList entities.UserList
-	uJson, err := user.GetLatest(kLatest)
+	uJson, err := user.GetLatest(name, kLatest)
 	if err != nil {
 		logger.Error(err)
 		return "", err
@@ -80,6 +80,10 @@ func Query() (string, error) {
 	for _, u := range uList {
 		qList = append(qList, getQueryReponse(u, aList))
 	}
+
+	sort.Slice(qList, func(i, j int) bool {
+		return qList[i].Timestamp < qList[j].Timestamp
+	})
 
 	return entities.ToJson(qList), nil
 }
