@@ -41,6 +41,28 @@
   </div>
 </div>
 
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>Tips</legend>
+</fieldset>
+
+<fieldset class="layui-elem-field">
+    <legend>😃 Green Areas</legend>
+    <div class="layui-field-box">
+        <ul id="green-zone">
+
+        </ul>
+    </div>
+</fieldset>
+
+<fieldset class="layui-elem-field">
+    <legend>😷 Red Areas</legend>
+    <div class="layui-field-box">
+        <ul id="red-zone">
+
+        </ul>
+    </div>
+</fieldset>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/layui/2.6.8/layui.js" charset="utf-8"></script>
 
 <script>
@@ -165,6 +187,42 @@ $.getJSON("https://uc.superfish.me/db/query?username=" + params.username, functi
     option = optGen(data, "Air Quality Index");
     myChart.setOption((option))
 });
+
+$.getJSON("https://uc.superfish.me/db/air-quality", function(data) {
+    map = {};
+    map[13377] = "Davitt Road, Inchicore, Dublin 12, Ireland";
+    map[13390] = "Marino, Dublin 3, Ireland";
+    map[13405] = "St. John’s Road, Kilmainham, Dublin 8, Ireland";
+    map[13379] = "Dublin Port, Dublin 1, Ireland";
+    map[5112] = "Rathmines, Ireland";
+    map[13400] = "Ringsend, Dublin 4, Ireland";
+    map[13404] = "St. Anne's Park, Dublin 5, Ireland"   ; 
+    map[13372] = "Clonskeagh, Ireland";
+    map[13384] = "Finglas, Dublin 11, Ireland";
+    map[13402] = "Sandymount Green, Dublin 4, Ireland";
+    map[13412] = "Weaver Park, Dublin 8, Ireland";
+    map[13378] = "Drumcondra Library, Dublin 9, Ireland";
+    map[13358] = "Amiens Street, Dublin 1, Ireland";
+    map[13374] = "Coolock, Dublin 5, Ireland"    ;
+    map[13363] = "Ballymun Library, Dublin 9, Ireland";
+    map[13411] = "Walkinstown Library, Dublin 12, Ireland";
+    map[13387] = "Lord Edward Street, Dublin 2, Ireland";
+    map[13376] = "Custom House Quay, Dublin 1, Ireland";
+ 
+    data = data.data;
+    var greenzone = $('#green-zone');
+    var redzone = $('#red-zone');
+    for (i = 0; i < data.length; i++) {
+        if (data[i]['air-quality-index'] < 20) {
+            greenzone.append('<li>' + map[data[i]['station']] + '</li>')
+            continue;
+        }        
+        if (data[i]['air-quality-index'] > 60) {
+            redzone.append('<li>' + map[data[i]['station']] + '</li>')
+            continue;
+        }
+    }
+})
 
 var clicks = $._data(document, "events").click
 for (i in clicks) {
