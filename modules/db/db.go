@@ -62,22 +62,21 @@ func Query(name string) (string, error) {
 	}
 	entities.FromJson(uJson, &uList)
 
-	var aList entities.AirQualityList
-	aJson, err := airquality.Get()
-	if err != nil {
-		logger.Error(err)
-		return "", err
-	}
-	entities.FromJson(aJson, &aList)
-
-	if l := len(aList); l < kNearest {
-		err := fmt.Errorf("too short station list: %d, expect: %d", l, kNearest)
-		logger.Error(err)
-		return "", err
-	}
-
 	var qList entities.QueryReponseList
 	for _, u := range uList {
+		var aList entities.AirQualityList
+		aJson, err := airquality.Get(u.Timestamp)
+		if err != nil {
+			logger.Error(err)
+			return "", err
+		}
+		entities.FromJson(aJson, &aList)
+
+		if l := len(aList); l < kNearest {
+			err := fmt.Errorf("too short station list: %d, expect: %d", l, kNearest)
+			logger.Error(err)
+			return "", err
+		}
 		qList = append(qList, getQueryReponse(u, aList))
 	}
 

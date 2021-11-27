@@ -9,7 +9,7 @@ import (
 )
 
 func handleAirQualityGet(w http.ResponseWriter, req *http.Request) {
-	json, err := airquality.Get()
+	json, err := airquality.Get(-1)
 	if err != nil {
 		makeError(&w, http.StatusBadRequest, err.Error())
 		return

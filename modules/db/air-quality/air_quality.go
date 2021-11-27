@@ -7,6 +7,8 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strconv"
+	"strings"
 
 	"github.com/fishjump/cs7ns4/modules/entities"
 
@@ -34,7 +36,7 @@ func init() {
 
 }
 
-func getLatestData(path string) (string, error) {
+func getNearestData(timestamp int, path string) (string, error) {
 	files, err := ioutil.ReadDir(path)
 	if err != nil {
 		return "", err
@@ -56,7 +58,34 @@ func getLatestData(path string) (string, error) {
 		return files[i].Name() > files[j].Name()
 	})
 
-	data, err := ioutil.ReadFile(path + "/" + files[0].Name())
+	if timestamp == -1 {
+		data, err := ioutil.ReadFile(path + "/" + files[0].Name())
+		if err != nil {
+			return "", err
+		}
+
+		return string(data), nil
+	}
+
+	nearest := -1
+	for i := 0; i < len(files); i++ {
+		fTimestamp := strings.TrimSuffix(files[i].Name(), ".json")
+		fTs, err := strconv.Atoi(fTimestamp)
+		if err != nil {
+			return "", err
+		}
+
+		if fTs < timestamp {
+			nearest = i
+			break
+		}
+	}
+
+	if nearest == -1 {
+		return "", errors.New("not find nearest data")
+	}
+
+	data, err := ioutil.ReadFile(path + "/" + files[nearest].Name())
 	if err != nil {
 		return "", err
 	}
@@ -132,7 +161,7 @@ func GetStation(name string) (string, error) {
 }
 
 // Get latest air quality data from each station
-func Get() (string, error) {
+func Get(timestamp int) (string, error) {
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
 		return "", err
@@ -149,7 +178,7 @@ func Get() (string, error) {
 			continue
 		}
 
-		tmp, err := getLatestData(dir + file.Name())
+		tmp, err := getNearestData(timestamp, dir+file.Name())
 		if err != nil {
 			return "", err
 		}
